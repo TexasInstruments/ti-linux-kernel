@@ -1151,7 +1151,9 @@ static void sa_free_ctx_info(struct sa_ctx_info *ctx,
 
 	if (ctx->sc) {
 		memzero_explicit(ctx->sc, SA_CTX_MAX_SZ);
-		dma_unmap_single(dev, ctx->sc_phys, SA_CTX_MAX_SZ, DMA_BIDIRECTIONAL);
+		if (ctx->sc_phys) {
+			dma_unmap_single(dev, ctx->sc_phys, SA_CTX_MAX_SZ, DMA_BIDIRECTIONAL);
+		}
 		mempool_free(ctx->sc, data->sc_pool);
 		ctx->sc = NULL;
 	}
